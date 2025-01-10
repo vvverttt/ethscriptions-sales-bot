@@ -68,14 +68,26 @@ TWITTER_EMAIL=your_twitter_email
 ## Running the App
 
 ```bash
-# Development
-yarn run start
+# Development mode
+yarn start
+# or
+npm run start
+# or
+pnpm start
 
 # Watch mode
-yarn run start:dev
+yarn start:dev
+# or
+npm run start:dev
+# or
+pnpm start:dev
 
 # Production mode
-yarn run start:prod
+yarn start:prod
+# or
+npm run start:prod
+# or
+pnpm start:prod
 ```
 
 ## Adding New Collections
