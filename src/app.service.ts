@@ -153,7 +153,7 @@ export class AppService implements OnModuleInit {
       // Iterate events for each market
       for (const marketEvent of market.events) {
         // Example usage
-        const saleLogs = await this.evmSvc.indexPreviousEvents(market, marketEvent, 100_000);
+        const saleLogs = await this.evmSvc.indexPreviousEvents(market, marketEvent, 30_000);
         for (const log of saleLogs) {
           await this.handleEvent(market, marketEvent, [log]);
         }

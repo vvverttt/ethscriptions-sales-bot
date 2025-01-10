@@ -25,6 +25,17 @@ A NestJS-based bot that monitors Ethereum blockchain events for Ethscription sal
 
 👍 **Real-time Price Data**: Maintains current ETH/USD price through CoinGecko API
 
+### Example Notifications
+
+Here are some examples of generated sale notifications:
+
+`(with CARD_GEN_ENABLED=1 and CARD_GEN_ENABLED=0)`
+
+<div style="display: flex; gap: 20px;">
+  <img src="./src/assets/examples/Screenshot 2025-01-10 at 2.13.07 PM.png" width="200" alt="Marketplace 1 Example">
+  <img src="./src/assets/examples/Screenshot 2025-01-10 at 2.16.21 PM.png" width="200" alt="Marketplace 2 Example">
+</div>
+
 ## Prerequisites
 
 - Node.js
