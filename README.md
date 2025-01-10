@@ -49,21 +49,7 @@ pnpm install
 
 ## Configuration
 
-Create a `.env` file based on the provided `.env.example`:
-
-```env
-NODE_ENV=development
-IMAGE_GEN_ENABLED=1
-
-# RPC
-RPC_URL=your_ethereum_rpc_url
-
-# Twitter
-TWITTER_ENABLED=0
-TWITTER_USERNAME=your_twitter_username
-TWITTER_PASSWORD=your_twitter_password
-TWITTER_EMAIL=your_twitter_email
-```
+Create a `.env` file based on the provided `.env.example` file.
 
 ## Running the App
 
