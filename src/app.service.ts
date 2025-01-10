@@ -31,7 +31,6 @@ export class AppService implements OnModuleInit {
 
   onModuleInit() {
     this.watchEvents();
-    this.testWithHistory();
   }
 
   /**
