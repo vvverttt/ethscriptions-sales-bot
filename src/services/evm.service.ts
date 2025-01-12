@@ -70,7 +70,7 @@ export class EvmService {
     
     const unwatch = this.client.watchEvent({
       address: market.address,
-      event: parseAbiItem(marketEvent.signature) as AbiEvent,
+      event: parseAbiItem(marketEvent.eventTrigger?.signature || marketEvent.signature) as AbiEvent,
       onLogs: logs => emitter.emit('event', logs)
     });
 
