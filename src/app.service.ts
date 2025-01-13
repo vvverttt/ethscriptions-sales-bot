@@ -31,6 +31,10 @@ export class AppService implements OnModuleInit {
 
   onModuleInit() {
     this.watchEvents();
+
+    if (Number(process.env.TEST_WITH_HISTORY)) {
+      this.testWithHistory();
+    }
   }
 
   /**
@@ -152,7 +156,11 @@ export class AppService implements OnModuleInit {
       // Iterate events for each market
       for (const marketEvent of market.events) {
         // Example usage
-        const saleLogs = await this.evmSvc.indexPreviousEvents(market, marketEvent, 30_000);
+        const saleLogs = await this.evmSvc.indexPreviousEvents(
+          market, 
+          marketEvent, 
+          Number(process.env.TEST_WITH_HISTORY)
+        );
         for (const log of saleLogs) {
           await this.handleEvent(market, marketEvent, [log]);
         }

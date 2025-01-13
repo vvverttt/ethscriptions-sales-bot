@@ -40,7 +40,7 @@ export class TwitterService {
       await this.scraper.login(
         process.env.TWITTER_USERNAME,
         process.env.TWITTER_PASSWORD,
-        undefined,
+        process.env.TWITTER_EMAIL,
         process.env.TWITTER_TWO_FACTOR_SECRET
       );
 
