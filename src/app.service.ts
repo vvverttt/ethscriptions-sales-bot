@@ -125,10 +125,15 @@ export class AppService implements OnModuleInit {
     // Generate the image
     const imageAttachment = await this.imageSvc.generate(hashId, value, txHash, inscriptionImageUri, collectionMetadata);
 
+    const [buyerEns, sellerEns] = await Promise.all([
+      this.evmSvc.getEnsName(buyer),
+      this.evmSvc.getEnsName(seller),
+    ]);
+
     // Create the notification message
     const notificationMessage: NotificationMessage = {
       title: `${collectionMetadata.itemName} was sold`,
-      message: `From: ${this.utilSvc.formatAddress(seller)}\nTo: ${this.utilSvc.formatAddress(buyer)}\n\nFor: ${value} ETH ($${this.utilSvc.formatCash(Number(value) * this.dataSvc.usdPrice)})`,
+      message: `From: ${sellerEns || this.utilSvc.formatAddress(seller)}\nTo: ${buyerEns || this.utilSvc.formatAddress(buyer)}\n\nFor: ${value} ETH ($${this.utilSvc.formatCash(Number(value) * this.dataSvc.usdPrice)})`,
       link: `https://etherscan.io/tx/${txHash}`,
       imageBuffer: imageAttachment,
       filename: `${hashId}.png`,

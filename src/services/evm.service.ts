@@ -101,4 +101,18 @@ export class EvmService {
     const dataURI = fromHex(tx.input, 'string');
     return dataURI || null;
   }
+
+  /**
+   * Retrieves the ENS name for a given Ethereum address
+   * @param address The Ethereum address to look up
+   * @returns The ENS name for the address, or null if not found
+   */
+  async getEnsName(address: `0x${string}`): Promise<string | null> {
+    try {
+      return await this.client.getEnsName({ address });
+    } catch (error) {
+      console.error(error);
+      return null;
+    }
+  }
 }
