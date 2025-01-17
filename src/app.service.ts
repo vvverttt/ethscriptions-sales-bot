@@ -32,9 +32,14 @@ export class AppService implements OnModuleInit {
   onModuleInit() {
     this.watchEvents();
 
-    if (Number(process.env.TEST_WITH_HISTORY)) {
-      this.testWithHistory();
-    }
+    setTimeout(() => {
+      // Test with history or range
+      if (Number(process.env.TEST_WITH_HISTORY)) {
+        this.testWithHistory();
+      } else if (process.env.TEST_WITH_RANGE.split(',').length === 2) {
+        this.testWithRange();
+      }
+    }, 2000);
   }
 
   /**
@@ -156,6 +161,7 @@ export class AppService implements OnModuleInit {
    * This allows testing the full event handling pipeline with real past data
    */
   async testWithHistory() {
+    Logger.log(`Testing with history: ${process.env.TEST_WITH_HISTORY}`, 'AppService');
     // Iterate markets
     for (const market of markets) {
       // Iterate events for each market
@@ -165,6 +171,35 @@ export class AppService implements OnModuleInit {
           market, 
           marketEvent, 
           Number(process.env.TEST_WITH_HISTORY)
+        );
+        for (const log of saleLogs) {
+          await this.handleEvent(market, marketEvent, [log]);
+        }
+      }
+    }
+  }
+
+  /**
+   * Test method that processes historical events from all configured markets
+   * Used for testing event handling with past events rather than live events
+   * 
+   * Iterates through all markets and their events, processing all historical events found
+   * This allows testing the full event handling pipeline with real past data
+   */
+  async testWithRange() {
+    Logger.log(`Testing with range: ${process.env.TEST_WITH_RANGE}`, 'AppService');
+    // Iterate markets
+    for (const market of markets) {
+      // Iterate events for each market
+      for (const marketEvent of market.events) {
+        // Example usage
+        const saleLogs = await this.evmSvc.indexPreviousEvents(
+          market, 
+          marketEvent, 
+          {
+            startBlock: Number(process.env.TEST_WITH_RANGE.split(',')[0]),
+            endBlock: Number(process.env.TEST_WITH_RANGE.split(',')[1])
+          }
         );
         for (const log of saleLogs) {
           await this.handleEvent(market, marketEvent, [log]);

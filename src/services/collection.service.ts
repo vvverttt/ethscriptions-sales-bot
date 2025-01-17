@@ -58,9 +58,7 @@ export class CollectionService implements OnModuleInit {
         const data = await response.json() as JSONCollection | any;
 
         const collectionName = data.name;
-        const collectionImageHash = this.utilSvc.extractHex(
-          data.logo_image_uri || data.inscription_icon
-        );
+        const collectionImageHash = this.utilSvc.extractHex(data.logo_image_uri || data.inscription_icon);
         const backgroundColor = data.background_color;
         const websiteLink = data.website_link;
 
@@ -68,7 +66,14 @@ export class CollectionService implements OnModuleInit {
           const hashId = item.ethscription_id?.toLowerCase() || item.id?.toLowerCase();
           if (hashId) {
             const cacheKey = `inscription:${hashId}`;
-            const cacheData = { collectionName, collectionImageHash, itemName: item.name || item.meta.name, backgroundColor, websiteLink };
+            const cacheData = {
+              collectionName,
+              collectionImageHash,
+              itemName: item.name || item.meta.name,
+              backgroundColor,
+              websiteLink,
+              collectionImageUri: data.logo_image_uri || data.inscription_icon,
+            };
             this.memoryCache.set(cacheKey, cacheData);
           }
         }

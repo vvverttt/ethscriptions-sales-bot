@@ -28,23 +28,32 @@ export class EvmService {
    * Fetches historical sales events from a marketplace contract by querying logs in chunks
    * @param market The marketplace configuration containing the contract address
    * @param marketEvent The marketplace event configuration containing the event signature and parameters
-   * @param blockRange Number of blocks to look back from current block (default 100_000)
+   * @param blockRange Number of blocks to look back from current block, or object containing start and end blocks
    * @returns Array of event logs matching the event signature
    */
   async indexPreviousEvents(
     market: Market,
     marketEvent: MarketplaceEvent,
-    blockRange = 100_000
+    blockRange: number | { startBlock: number; endBlock: number } = 100_000
   ) {
-    const currentBlock = await this.client.getBlockNumber();
-    const targetStartBlock = currentBlock - BigInt(blockRange);
+    let startBlock: bigint;
+    let endBlock: bigint;
+
+    if (typeof blockRange === 'number') {
+      endBlock = await this.client.getBlockNumber();
+      startBlock = endBlock - BigInt(blockRange);
+    } else {
+      startBlock = BigInt(blockRange.startBlock);
+      endBlock = BigInt(blockRange.endBlock);
+    }
+
     const CHUNK_SIZE = 10_000;
     const logs = [];
 
     // Query in chunks of CHUNK_SIZE blocks
-    for (let fromBlock = targetStartBlock; fromBlock < currentBlock; fromBlock += BigInt(CHUNK_SIZE)) {
-      const toBlock = fromBlock + BigInt(CHUNK_SIZE) > currentBlock 
-        ? currentBlock 
+    for (let fromBlock = startBlock; fromBlock < endBlock; fromBlock += BigInt(CHUNK_SIZE)) {
+      const toBlock = fromBlock + BigInt(CHUNK_SIZE) > endBlock 
+        ? endBlock 
         : fromBlock + BigInt(CHUNK_SIZE);
       
       const chunkLogs = await this.client.getLogs({
