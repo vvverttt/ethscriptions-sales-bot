@@ -201,14 +201,67 @@ export class ImageService {
     ctx.fillStyle = textColor;
     ctx.font = 'normal 80px RetroComputer';
     const itemNameWidth = ctx.measureText(collectionMetadata.itemName).width;
-    if (itemNameWidth > canvasWidth - (padding * 2)) {
+    const maxWidth = canvasWidth - (padding * 2);
+    let yPosition = canvasHeight - padding;
+    
+    if (itemNameWidth > maxWidth) {
       ctx.font = 'normal 60px RetroComputer';
+      const newWidth = ctx.measureText(collectionMetadata.itemName).width;
+      
+      if (newWidth > maxWidth) {
+        // Break into two lines
+        const words = collectionMetadata.itemName.split(' ');
+        let line1 = '';
+        let line2 = '';
+        let currentLine = '';
+        
+        for (const word of words) {
+          const testLine = currentLine ? `${currentLine} ${word}` : word;
+          if (ctx.measureText(testLine).width <= maxWidth) {
+            currentLine = testLine;
+          } else {
+            if (!line1) {
+              line1 = currentLine;
+              currentLine = word;
+            } else {
+              line2 = currentLine;
+              currentLine = word;
+            }
+          }
+        }
+        
+        if (!line2) {
+          line2 = currentLine;
+        }
+        
+        // Adjust vertical position for two lines
+        // Move up to accommodate second line
+        yPosition = canvasHeight - padding - 30;
+        
+        ctx.fillText(
+          line1.toUpperCase(),
+          padding,
+          yPosition,
+        );
+        ctx.fillText(
+          line2.toUpperCase(),
+          padding,
+          yPosition + 60, // Add line height for second line
+        );
+      } else {
+        ctx.fillText(
+          collectionMetadata.itemName.toUpperCase(),
+          padding,
+          yPosition,
+        );
+      }
+    } else {
+      ctx.fillText(
+        collectionMetadata.itemName.toUpperCase(),
+        padding,
+        yPosition,
+      );
     }
-    ctx.fillText(
-      collectionMetadata.itemName.toUpperCase(),
-      padding,
-      canvasHeight - padding,
-    );
 
     return canvas.toBuffer('image/png');
   }
