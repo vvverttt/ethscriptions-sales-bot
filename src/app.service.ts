@@ -213,4 +213,8 @@ export class AppService implements OnModuleInit {
       }
     }
   }
+
+  async testTwitterConnection() {
+    return await this.twitterSvc.testConnection();
+  }
 }
